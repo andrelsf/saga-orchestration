@@ -13,15 +13,18 @@
 #   - docker-compose: 
 #       (Install) ->  https://docs.docker.com/compose/install/
 
-PROJECTS=$(ls . | grep mc-)
+PROJECTS=("mc-inventory" "mc-lib" "mc-orders" "mc-payments" "mc-sec")
 
-for PROJECT in $PROJECTS
+echo "Initialize dockers"
+docker-compose up -d
+
+for PROJECT in "${PROJECTS[@]}"
 do
-  if [ -d "$PROJECT" ]; then
-    echo "Cloning project..."
+  if [ ! -d "$PROJECT" ]; then
+    echo "Cloning project... $PROJECT"
     git clone https://github.com/andrelsf/"$PROJECT".git
     cd $PROJECT && mvn clean install package && cd .. 
   fi
 done
 
-docker-compose up -d
+# Using IDE or CLI to start projects
